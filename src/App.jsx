@@ -73,23 +73,22 @@ export default function App() {
           <label style={{ marginLeft: "10px", color: "white" }}>✈️ Shipping: <select value={region} onChange={(e) => setRegion(e.target.value)}><option value="Domestic">India</option><option value="International">Abroad</option></select></label>
         </div>
       </div>
-           {activeTab === "shop" && (
+      {activeTab === "shop" && (
         <div>
           <input placeholder="🔍 Search..." value={search} onChange={e => setSearch(e.target.value)} style={{ padding: "10px", width: "100%", maxWidth: "280px", borderRadius: "8px", border: "1px solid #ccc", marginBottom: "15px" }} />
-          <div style={{ display: "flex", gap: "5px", marginBottom: "15px", flexWrap: "wrap" }}>{categories.map(c => <button key={c} onClick={() => setFilter(c)} style={{ padding: "6px 12px", backgroundColor: filter === c ? "#0f172a" : "white", color: filter === c ? "#f59e0b" : "black", border: "1px solid #ccc", borderRadius: "15px" }}>{c}</button>)}</div>
+          <div style={{ display: "flex", gap: "5px", marginBottom: "15px", flexWrap: "wrap" }}>{categories.map(c => <button key={c} onClick={() => setFilter(c)} style={{ padding: "6px 12px", backgroundColor: filter === c ? "#0f172a" : "white", color: filter === c ? "#f59e0b" : "black", border: "1px solid #ccc", borderRadius: "15px", cursor: "pointer" }}>{c}</button>)}</div>
           <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
             {products.filter(p => p.name.toLowerCase().includes(search.toLowerCase())).filter(p => filter === "All" || p.category === filter).map(p => (
               <div key={p.id} style={{ backgroundColor: "white", padding: "10px", borderRadius: "12px", width: "180px", border: "1px solid #eee" }}>
                 <img src={p.image} alt={p.name} style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "8px" }} />
                 <h4 style={{ margin: "8px 0 4px 0" }}>{p.name}</h4>
                 <p style={{ fontWeight: "bold", margin: "0 0 8px 0" }}>{syms[currency]}{Math.round(p.price * rates[currency])}</p>
-                <button onClick={() => { const ex = cart.find(i => i.id === p.id); setCart(ex ? cart.map(i => i.id === p.id ? { ...i, qty: i.qty + 1 } : i) : [...cart, { ...p, qty: 1 }]); alert("Added!"); }} style={{ width: "100%", padding: "8px", backgroundColor: "#0f172a", color: "#f59e0b", border: "none", borderRadius: "6px", fontWeight: "bold" }}>🛒 Add to Bag</button>
+                <button onClick={() => { const ex = cart.find(i => i.id === p.id); setCart(ex ? cart.map(i => i.id === p.id ? { ...i, qty: i.qty + 1 } : i) : [...cart, { ...p, qty: 1 }]); alert("Added!"); }} style={{ width: "100%", padding: "8px", backgroundColor: "#0f172a", color: "#f59e0b", border: "none", borderRadius: "6px", fontWeight: "bold", cursor: "pointer" }}>🛒 Add to Bag</button>
               </div>
             ))}
           </div>
         </div>
       )}
-
       {activeTab === "cart" && (
         <div style={{ backgroundColor: "white", padding: "15px", borderRadius: "12px" }}>
           <h3>🛒 Shopping Cart</h3>
@@ -102,47 +101,15 @@ export default function App() {
               </div>
               <p>Items: {syms[currency]}{subtotal} | Shipping: {syms[currency]}{shipCost()}</p><h2>Total: {syms[currency]}{total}</h2>
               <input placeholder="Name" value={cName} onChange={e => setCName(e.target.value)} style={{ display: "block", margin: "5px 0", padding: "6px", width: "100%", maxWidth: "280px" }} />
-              <input placeholder="Phone" value={cPhone} onChange={e => setCPhone(e.target.value)} style={{ display: "block", margin: "5px 0", padding: "6px", width: "100%", maxWidth: "280px" }} />
+              <input placeholder="Phone" value={cPhone} onChange={e => setCPhone(e.target.value)} style={{ display: "block", margin: "5px 0", padding: "8px", width: "100%", maxWidth: "280px" }} />
               <textarea placeholder="Address" value={cAddress} onChange={e => setCAddress(e.target.value)} style={{ display: "block", margin: "5px 0", padding: "6px", width: "100%", maxWidth: "280px", height: "50px" }} />
-              <button onClick={handlePay} style={{ padding: "10px", backgroundColor: "#25D366", color: "white", border: "none", borderRadius: "6px", fontWeight: "bold", width: "100%", maxWidth: "280px" }}>💳 Pay Now (Razorpay)</button>
+              <button onClick={handlePay} style={{ padding: "10px", backgroundColor: "#25D366", color: "white", border: "none", borderRadius: "6px", fontWeight: "bold", width: "100%", maxWidth: "280px", cursor: "pointer" }}>💳 Pay Now (Razorpay)</button>
             </div>
           )}
         </div>
       )}
-
       {activeTab === "track" && (
         <div style={{ backgroundColor: "white", padding: "15px", borderRadius: "12px" }}>
           <h3>📦 Track Order</h3>
           <input placeholder="Enter Phone Number" value={trackInput} onChange={e => setTrackInput(e.target.value)} style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ccc", width: "180px" }} />
-          {trackInput.trim() && orders.filter(o => o.phone.trim() === trackInput.trim()).map(o => (
-            <div key={o.id} style={{ border: "1px solid #f59e0b", padding: "10px", borderRadius: "8px", margin: "10px 0" }}>
-              <h5>Order ID: {o.displayId}</h5><p>Total: {o.sym}{o.total}</p><p>🚚 Status: <span style={{ color: "blue", fontWeight: "bold" }}>{o.status}</span></p><p>📦 Tracking Code: {o.trackingId}</p>
-            </div>
-          ))}
-        </div>
-      )}
 
-      {activeTab === "admin" && isAdmin && (
-        <div style={{ backgroundColor: "white", padding: "15px", borderRadius: "12px" }}>
-          <h3>📥 Orders ({orders.length})</h3>
-          {orders.map(o => (
-            <div key={o.id} style={{ borderBottom: "1px solid #eee", padding: "8px 0" }}>
-              <p><strong>ID:</strong> {o.displayId} | {o.name} ({o.phone}) - {o.address}</p><p>Paid: {o.sym}{o.total}</p>
-              <select value={o.status} onChange={(e) => setOrders(orders.map(x => x.id === o.id ? { ...x, status: e.target.value } : x))}><option value="Paid & Confirmed">Paid</option><option value="Dispatched from Shop">Dispatched</option><option value="Delivered">Delivered</option></select>
-              <input placeholder="Tracking Code" value={o.trackingId === "Pending" ? "" : o.trackingId} onChange={(e) => setOrders(orders.map(x => x.id === o.id ? { ...x, trackingId: e.target.value } : x))} style={{ marginLeft: "5px", width: "100px" }} />
-              <button onClick={() => setOrders(orders.filter(x => x.id !== o.id))} style={{ color: "red", marginLeft: "10px", background: "none", border: "none" }}>Delete</button>
-            </div>
-          ))}
-          <h3>🛠️ Add Product</h3>
-          <input placeholder="Name" value={pName} onChange={e => setPName(e.target.value)} style={{ padding: "4px", margin: "2px" }} />
-          <input placeholder="Price" type="number" value={pPrice} onChange={e => setPPrice(e.target.value)} style={{ padding: "4px", margin: "2px", width: "80px" }} />
-          <select value={pCat} onChange={e => setPCat(e.target.value)}>{categories.filter(c => c !== "All").map(c => <option key={c} value={c}>{c}</option>)}</select>
-          <input type="file" accept="image/*" onChange={e => { const f = e.target.files; if (f && f) { const r = new FileReader(); r.onloadend = () => setPImage(r.result); r.readAsDataURL(f); } }} style={{ fontSize: "12px" }} />
-          <button onClick={() => { if(!pName||!pPrice||!pImage) return alert("Fill all!"); setProducts([...products, { id: Date.now(), name: pName, price: Number(pPrice), category: pCat, image: pImage }]); setPName(""); setPPrice(""); setPImage(""); }} style={{ padding: "4px 8px", backgroundColor: "#0f172a", color: "#f59e0b", border: "none" }}>Publish</button>
-          <h3>Active Inventory:</h3>
-          {products.map(p => <div key={p.id} style={{ margin: "5px 0" }}>{p.name} (₹{p.price}) <button onClick={() => setProducts(products.filter(x => x.id !== p.id))} style={{ color: "red", background: "none", border: "none" }}>[Remove]</button></div>)}
-        </div>
-      )}
-    </div>
-  );
-}
