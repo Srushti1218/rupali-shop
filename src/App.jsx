@@ -80,10 +80,10 @@ export default function App() {
           <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
             {products.filter(p => p.name.toLowerCase().includes(search.toLowerCase())).filter(p => filter === "All" || p.category === filter).map(p => (
               <div key={p.id} style={{ backgroundColor: "white", padding: "10px", borderRadius: "12px", width: "180px", border: "1px solid #eee" }}>
-                <img src={p.image} alt={p.name} style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "8px" }} />
+                <img src={p.image} alt={p.name} style={{ width: "100%", height: "150px", objectFit: "cover", borderRadius: "12px" }} />
                 <h4 style={{ margin: "8px 0 4px 0" }}>{p.name}</h4>
                 <p style={{ fontWeight: "bold", margin: "0 0 8px 0" }}>{syms[currency]}{Math.round(p.price * rates[currency])}</p>
-                <button onClick={() => { const ex = cart.find(i => i.id === p.id); setCart(ex ? cart.map(i => i.id === p.id ? { ...i, qty: i.qty + 1 } : i) : [...cart, { ...p, qty: 1 }]); alert("Added!"); }} style={{ width: "100%", padding: "8px", backgroundColor: "#0f172a", color: "#f59e0b", border: "none", borderRadius: "6px", fontWeight: "bold", cursor: "pointer" }}>🛒 Add to Bag</button>
+                <button onClick={() => { const ex = cart.find(i => i.id === p.id); setCart(ex ? cart.map(i => i.id === p.id ? { ...i, qty: i.qty + 1 } : i) : [...cart, { ...p, qty: 1 }]); alert("Added!"); }} style={{ width: "100%", padding: "10px", backgroundColor: "#0f172a", color: "#f59e0b", border: "none", borderRadius: "6px", fontWeight: "bold", cursor: "pointer" }}>🛒 Add to Bag</button>
               </div>
             ))}
           </div>
@@ -103,7 +103,7 @@ export default function App() {
               <input placeholder="Name" value={cName} onChange={e => setCName(e.target.value)} style={{ display: "block", margin: "5px 0", padding: "6px", width: "100%", maxWidth: "280px" }} />
               <input placeholder="Phone" value={cPhone} onChange={e => setCPhone(e.target.value)} style={{ display: "block", margin: "5px 0", padding: "8px", width: "100%", maxWidth: "280px" }} />
               <textarea placeholder="Address" value={cAddress} onChange={e => setCAddress(e.target.value)} style={{ display: "block", margin: "5px 0", padding: "6px", width: "100%", maxWidth: "280px", height: "50px" }} />
-              <button onClick={handlePay} style={{ padding: "10px", backgroundColor: "#25D366", color: "white", border: "none", borderRadius: "6px", fontWeight: "bold", width: "100%", maxWidth: "280px", cursor: "pointer" }}>Direct Checkout</button>
+              <button onClick={handlePay} style={{ padding: "10px", backgroundColor: "#25D366", color: "white", border: "none", borderRadius: "6px", fontWeight: "bold", width: "100%", maxWidth: "280px", cursor: "pointer" }}>💳 Pay Now (Razorpay)</button>
             </div>
           )}
         </div>
@@ -112,4 +112,3 @@ export default function App() {
         <div style={{ backgroundColor: "white", padding: "15px", borderRadius: "12px" }}>
           <h3>📦 Track Order</h3>
           <input placeholder="Enter Phone Number" value={trackInput} onChange={e => setTrackInput(e.target.value)} style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ccc", width: "180px" }} />
-
